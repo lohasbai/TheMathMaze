@@ -5,13 +5,18 @@
 using System;
 using System.Collections.Generic;
 
-namespace SKArctanX
+namespace SKSpecial
 {
     /// <summary>
     /// 有符号高精度，特殊地，零只有一位精度
     /// </summary>
-    class SKSpecialDecimal
+    public class SKSpecialDecimal
     {
+        /// <summary>
+        /// 指示是否在进行高精度四则运算时进行精度外的消减
+        /// </summary>
+        public const bool CUT_IN_OPERATOR = false;
+
         /// <summary>
         /// 默认的构造函数，此时不表示任何数，有效位数为零
         /// </summary>
@@ -479,13 +484,16 @@ namespace SKArctanX
             SKSpecialDecimal b_copy = new SKSpecialDecimal(b);
             //越小越精确，表示末位所在的位置
             SKSpecialDecimal ret = add(a_copy, b_copy);
-            int a_min_bit = a_copy.exp_10 - a_copy.get_digit() + 1;
-            int b_min_bit = b_copy.exp_10 - b_copy.get_digit() + 1;
-            int ret_min_bit = ret.exp_10 - ret.get_digit() + 1;
-            if (a_min_bit > b_min_bit)//以a的精度为准
-                ret.cut(ret.get_digit() - a_min_bit + ret_min_bit);
-            else//以b的精度为准
-                ret.cut(ret.get_digit() - b_min_bit + ret_min_bit);
+            if (CUT_IN_OPERATOR)
+            {
+                int a_min_bit = a_copy.exp_10 - a_copy.get_digit() + 1;
+                int b_min_bit = b_copy.exp_10 - b_copy.get_digit() + 1;
+                int ret_min_bit = ret.exp_10 - ret.get_digit() + 1;
+                if (a_min_bit > b_min_bit)//以a的精度为准
+                    ret.cut(ret.get_digit() - a_min_bit + ret_min_bit);
+                else//以b的精度为准
+                    ret.cut(ret.get_digit() - b_min_bit + ret_min_bit);
+            }
             return ret;
         }
         /// <summary>
@@ -606,7 +614,8 @@ namespace SKArctanX
                 return new SKSpecialDecimal();
             int less = Math.Min(a.get_digit(), b.get_digit());
             SKSpecialDecimal ret = mul(a, b);
-            ret.cut(less);
+            if(CUT_IN_OPERATOR)
+                ret.cut(less);
             return ret;
         }
         /// <summary>
@@ -666,7 +675,8 @@ namespace SKArctanX
                 return new SKSpecialDecimal();
             int less = Math.Min(a.get_digit(), b.get_digit());
             SKSpecialDecimal ret = div(a, b);
-            ret.cut(less);
+            if(CUT_IN_OPERATOR)
+                ret.cut(less);
             return ret;
         }
         /// <summary>
