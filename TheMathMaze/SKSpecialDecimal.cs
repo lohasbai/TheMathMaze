@@ -406,6 +406,23 @@ namespace SKSpecial
             }
             return ans;
         }
+        /// <summary>
+        /// 输出整数部分，自动补零
+        /// </summary>
+        /// <returns></returns>
+        public string to_string_only_integer()
+        {
+            string ret = "";
+            if (data.Count == 0)
+                return ret;
+            if (exp_10 < 0)
+                return "0";
+            if (!positive)
+                ret += "-";
+            for (int i = 0; i < exp_10 + 1; i++)
+                ret += data[i].ToString();
+            return ret;
+        }
 
         /// <summary>
         /// 返回绝对值

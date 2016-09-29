@@ -43,6 +43,7 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "Button";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // textBox1
             // 
@@ -52,8 +53,10 @@
             this.textBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox1.Size = new System.Drawing.Size(1003, 371);
             this.textBox1.TabIndex = 1;
+            this.textBox1.Text = "ABC_+DEF_GGG";
             // 
             // textBox2
             // 
@@ -64,6 +67,7 @@
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
+            this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox2.Size = new System.Drawing.Size(1003, 337);
             this.textBox2.TabIndex = 2;
             // 
