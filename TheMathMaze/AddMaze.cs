@@ -167,7 +167,7 @@ namespace TheMathMaze
             string[] linesa = spilt_to_3(tmpa);
             string[] linesb = spilt_to_3(tmpa);
             //剪枝0：是否是不可能的加法
-            if (Math.Max(linesa[0].Length, linesa[1].Length) != linesa[2].Length ||
+            if (Math.Max(linesa[0].Length, linesa[1].Length) != linesa[2].Length &&
                 Math.Max(linesa[0].Length, linesa[1].Length) != linesa[2].Length - 1)
             {
                 ret = new SKSpecialDecimal(-2);
