@@ -10,6 +10,9 @@ namespace TheMathMaze
     {
         public static string get_result(string console)
         {
+            console = console.Replace(" ", "");
+            console = console.Replace("\r", "");
+            console = console.Replace("\n", "");
             BaseEquation be = new BaseEquation(console);
             if (be.method == BaseEquation.METHOD.ADD)
                 return AddMaze.get_results(be);
