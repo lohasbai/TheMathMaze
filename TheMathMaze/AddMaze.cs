@@ -33,7 +33,9 @@ namespace TheMathMaze
                 }
                 if (sorted_equation_list.First.Value.ans_found)
                 {
-                    ret = sorted_equation_list.First.Value.equation_console;
+                    if (ret == "answer not found")
+                        ret = "";
+                    ret += sorted_equation_list.First.Value.equation_console + "\r\n";
                     break;
                 }
                 LinkedListNode<AddEquation> now = sorted_equation_list.First;
@@ -43,8 +45,11 @@ namespace TheMathMaze
                 for (int i = 0; i < ava_n.Count; i++)
                 {
                     if (ava_n[i] == 0)
-                        if (now.Value.get_first_in_each_line().IndexOf(ava_l[0]) != -1)
+                    {
+                        int first_l = now.Value.get_first_in_each_line().IndexOf(ava_l[0]);
+                        if (first_l != -1 && now.Value.spilt_string_without_operator[first_l].Length > 1)
                             continue;
+                }
                     string new_eva = now.Value.replace(ava_l[0], ava_n[i]);
                     AddEquation new_eq = new AddEquation(new_eva);
                     if (new_eq.ans_found)
@@ -52,7 +57,7 @@ namespace TheMathMaze
                         if (ret == "answer not found")
                             ret = "";
                         ret += new_eq.equation_console + "\r\n";
-                        break;
+                        continue;
                     }
                     sorted_equation_list = sorted_insert(sorted_equation_list, calculated_equation_list, new_eq);
                 }
@@ -162,7 +167,8 @@ namespace TheMathMaze
             string[] linesa = spilt_to_3(tmpa);
             string[] linesb = spilt_to_3(tmpa);
             //剪枝0：是否是不可能的加法
-            if (Math.Max(linesa[0].Length, linesa[1].Length) < linesa[2].Length - 1)
+            if (Math.Max(linesa[0].Length, linesa[1].Length) != linesa[2].Length ||
+                Math.Max(linesa[0].Length, linesa[1].Length) != linesa[2].Length - 1)
             {
                 ret = new SKSpecialDecimal(-2);
                 NodePointStatic = ret;
@@ -211,7 +217,7 @@ namespace TheMathMaze
                 if (do_this)
                 {
                     int tmpi = (xi[0] + xi[1]) % 10;
-                    if (tmpi != xi[2] && tmpi != xi[2] - 1)
+                    if (tmpi != xi[2] && (tmpi + 1) % 10 != xi[2])
                     {
                         ret = new SKSpecialDecimal(-2);
                         NodePointStatic = ret;

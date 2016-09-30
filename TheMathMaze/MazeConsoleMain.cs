@@ -13,6 +13,8 @@ namespace TheMathMaze
             BaseEquation be = new BaseEquation(console);
             if (be.method == BaseEquation.METHOD.ADD)
                 return AddMaze.get_results(be);
+            else if (be.method == BaseEquation.METHOD.SUB)
+                return SubMaze.get_results(be);
             return "Wrong input";
         }
     }
@@ -61,10 +63,32 @@ namespace TheMathMaze
         {
             get
             {
-                if (_spilt_string != null || equation_console == "")
-                    return _spilt_string;
-                _spilt_string = equation_console.Split(new char[1] { '_' });
-                return _spilt_string;
+                if (equation_console == "")
+                    return null;
+                return equation_console.Split(new char[1] { '_' });
+            }
+        }
+        /// <summary>
+        /// 拆分各行不含运算符
+        /// </summary>
+        public string[] spilt_string_without_operator
+        {
+            get
+            {
+                if (equation_console == "")
+                    return null;
+                string[] tmpstring;
+                tmpstring = equation_console.Split(new char[1] { '_' });
+                for (int i = 0; i < tmpstring.Length; i++)
+                {
+                    if (tmpstring[i].Length > 0)
+                    {
+                        char c = tmpstring[i][0];
+                        if ((c < '0' || c > '9') && (c < 'A' || c > 'Z'))
+                            tmpstring[i] = tmpstring[i].Substring(1);
+                    }
+                }
+                return tmpstring;
             }
         }
         /// <summary>
@@ -79,6 +103,8 @@ namespace TheMathMaze
                     return 0;
                 string[] lines = equation_console.Split(new char[] { '_' });
                 lines[1] = lines[1].Substring(1);
+                if (method == METHOD.SUB && lines[2][0] == '-')
+                    lines[2] = lines[2].Substring(1);
                 for (int i = 0; i < lines.Length; i++)
                     if (lines[i].Length > ret)
                         ret = lines[i].Length;
@@ -120,10 +146,11 @@ namespace TheMathMaze
                 return null;
             string[] lines = equation_console.Split(new char[1] { '_' });
             lines[1] = lines[1].Substring(1);
+            if (method == METHOD.SUB && lines[2][0] == '-')
+                lines[2] = lines[2].Substring(1);
             List<char> ret = new List<char>();
             for (int i = 0; i < lines.Length; i++)
             {
-                if (ret.IndexOf(lines[i][0]) == -1)
                     ret.Add(lines[i][0]);
             }
             return ret;
@@ -159,7 +186,8 @@ namespace TheMathMaze
                 return false;
             }
             lines[1] = lines[1].Substring(1);
-
+            if (method == METHOD.SUB && lines[2][0] == '-')
+                lines[2] = lines[2].Substring(1);
             List<char> category_already = new List<char>();
             foreach (string line in lines)
             {
@@ -208,7 +236,6 @@ namespace TheMathMaze
         public void clear()
         {
             equation_console = "";
-            _spilt_string = null;
         }
         /// <summary>
         /// 可用的数字
@@ -235,11 +262,13 @@ namespace TheMathMaze
         /// 可用的字母，先高位
         /// </summary>
         /// <returns></returns>
-        public List<char> available_letters_from_begin()
+        public List<char> available_letters_from_begin(int count = -1)
         {
             List<char> ret = new List<char>();
             string[] lines = equation_console.Split(new char[] { '_' });
             lines[1] = lines[1].Substring(1);
+            if (method == METHOD.SUB && lines[2][0] == '-')
+                lines[2] = lines[2].Substring(1);
             int _max_line_len = max_line_len;
             for (int i = 0; i < _max_line_len; i++)
             {
@@ -250,8 +279,10 @@ namespace TheMathMaze
                         {
                             ret.Add(lines[j][i]);
                         }
+                    if (ret.Count == 10 || (count > 0 && ret.Count == count))
+                        break;
                 }
-                if (ret.Count == 10)
+                if (ret.Count == 10 || (count > 0 && ret.Count == count))
                     break;
             }
             return ret;
@@ -260,23 +291,28 @@ namespace TheMathMaze
         /// 可用的字母，先低位
         /// </summary>
         /// <returns></returns>
-        public List<char> available_letters_from_last()
+        public List<char> available_letters_from_last(int count = -1)
         {
             List<char> ret = new List<char>();
             string[] lines = equation_console.Split(new char[] { '_' });
             lines[1] = lines[1].Substring(1);
+            if (method == METHOD.SUB && lines[2][0] == '-')
+                lines[2] = lines[2].Substring(1);
             int _max_line_len = max_line_len;
-            for (int i = _max_line_len - 1 ; i >= 0; i--)
+            for (int i = 0 ; i < _max_line_len; i++)
             {
                 for (int j = 0; j < lines.Length; j++)
                 {
                     if (lines[j].Length > i)
-                        if (lines[j][i] >= 'A' && lines[j][i] <= 'J' && (ret.IndexOf(lines[j][i]) == -1))
-                        {
-                            ret.Add(lines[j][i]);
-                        }
+                    {
+                        char c = lines[j][lines[j].Length - i - 1];
+                        if (c >= 'A' && c <= 'J' && (ret.IndexOf(c) == -1))
+                            ret.Add(c);
+                    }
+                    if (ret.Count == 10 || (count > 0 && ret.Count == count))
+                        break;
                 }
-                if (ret.Count == 10)
+                if (ret.Count == 10 || (count > 0 && ret.Count == count))
                     break;
             }
             return ret;
@@ -285,14 +321,14 @@ namespace TheMathMaze
         /// 可用的字母，顺序扫描
         /// </summary>
         /// <returns></returns>
-        public List<char> available_letters()
+        public List<char> available_letters(int count = -1)
         {
             List<char> ret = new List<char>();
             foreach (char c in equation_console)
             {
                 if (c >= 'A' && c <= 'J' && ret.IndexOf(c) == -1)
                     ret.Add(c);
-                if (ret.Count == 10)
+                if (ret.Count == 10 || (count > 0 && ret.Count == count))
                     break;
             }
             return ret;
@@ -315,6 +351,9 @@ namespace TheMathMaze
             else
             {
                 if (index >= lines[line_num].Length)
+                    return '0';
+                //仅有的减法负号
+                if (lines[line_num][lines[line_num].Length - 1 - index] == '-')
                     return '0';
                 return lines[line_num][lines[line_num].Length - 1 - index];
             }
@@ -361,6 +400,5 @@ namespace TheMathMaze
 
 
         private string _equation_console = string.Empty;
-        private string[] _spilt_string = null;
     }
 }
