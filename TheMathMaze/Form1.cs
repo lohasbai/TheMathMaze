@@ -21,7 +21,7 @@ namespace TheMathMaze
         {
             textBox2.Text = "";
             DateTime t1 = DateTime.Now;
-            string ans = MazeConsoleMain.get_result(textBox1.Text);
+            string ans = ConsoleMazeMain.get_result(textBox1.Text);
             int milisec = (int)DateTime.Now.Subtract(t1).TotalMilliseconds;
             int ans_num = ans.Split(new char[1] { '\r' }).Length - 1;
 

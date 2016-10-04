@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TheMathMaze
 {
-    class MazeConsoleMain
+    class ConsoleMazeMain
     {
         public static string get_result(string console)
         {
@@ -15,9 +15,9 @@ namespace TheMathMaze
             console = console.Replace("\n", "");
             BaseEquation be = new BaseEquation(console);
             if (be.method == BaseEquation.METHOD.ADD)
-                return AddMaze.get_results(be);
+                return MazeAdd.get_results(be);
             else if (be.method == BaseEquation.METHOD.SUB)
-                return SubMaze.get_results(be);
+                return MazeSub.get_results(be);
             return "Wrong input";
         }
     }

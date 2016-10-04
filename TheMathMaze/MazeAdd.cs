@@ -10,7 +10,7 @@ namespace TheMathMaze
     /// <summary>
     /// 加法算式搜索
     /// </summary>
-    class AddMaze
+    class MazeAdd
     {
         /// <summary>
         /// 寻找解，找不到时返回"answer not found"

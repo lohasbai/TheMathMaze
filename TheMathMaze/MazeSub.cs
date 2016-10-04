@@ -7,7 +7,7 @@ using SKSpecial;
 
 namespace TheMathMaze
 {
-    class SubMaze
+    class MazeSub
     {
         /// <summary>
         /// 寻找解，找不到时返回"answer not found"
