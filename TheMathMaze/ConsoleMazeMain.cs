@@ -18,6 +18,8 @@ namespace TheMathMaze
                 return MazeAdd.get_results(be);
             else if (be.method == BaseEquation.METHOD.SUB)
                 return MazeSub.get_results(be);
+            else if (be.method == BaseEquation.METHOD.MUL)
+                return MazeMul.get_results(be);
             return "Wrong input";
         }
     }
@@ -95,7 +97,7 @@ namespace TheMathMaze
             }
         }
         /// <summary>
-        /// 最长的一行数（不含运算符）
+        /// 最长的一行的长度（不含运算符）
         /// </summary>
         public int max_line_len
         {
@@ -376,6 +378,7 @@ namespace TheMathMaze
             }
             return ret;
         }
+
         /// <summary>
         /// 判断对方算式是否与我相同
         /// </summary>
