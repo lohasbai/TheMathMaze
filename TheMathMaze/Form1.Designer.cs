@@ -56,7 +56,7 @@
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox1.Size = new System.Drawing.Size(1003, 371);
             this.textBox1.TabIndex = 1;
-            this.textBox1.Text = "ABC_+DEF_GGG";
+            this.textBox1.Text = "FGH_*EDCB_ACEF_BJCD_BGAB_CCIJ_CFHBHIF";
             // 
             // textBox2
             // 

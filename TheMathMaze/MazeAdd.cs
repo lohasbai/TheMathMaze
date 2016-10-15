@@ -188,6 +188,13 @@ namespace TheMathMaze
                 SKSpecialDecimal j1 = new SKSpecialDecimal(last[0].Substring(last[0].Length - min_last_len));
                 SKSpecialDecimal j2 = new SKSpecialDecimal(last[1].Substring(last[1].Length - min_last_len));
                 string left = (j1 + j2).to_string_only_integer();
+                if (left.Length < min_last_len)
+                {
+                    string tmpstring = "";
+                    for (int i = 0; i < min_last_len - left.Length; i++)
+                        tmpstring += "0";
+                    left = tmpstring + left;
+                }
                 left = left.Substring(left.Length - min_last_len);
                 string right = last[2].Substring(last[2].Length - min_last_len);
                 if (left != right)

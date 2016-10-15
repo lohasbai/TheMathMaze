@@ -8,7 +8,7 @@ using SKSpecial;
 namespace TheMathMaze
 {
     /// <summary>
-    /// 乘法有很多复杂的情况暂且不论，比如乘0什么的……
+    /// 乘法有很多复杂的情况暂且不论，比如乘0什么的……（搞事情……）
     /// </summary>
     class MazeMul
     {
@@ -157,6 +157,13 @@ namespace TheMathMaze
                 NodePointStatic = ret;
                 return ret;
             }
+            //剪枝0.5：不可能的乘法-结果位数太多
+            if (lines[lines.Length - 1].Length > (lines[0].Length + lines[1].Length))
+            {
+                ret = new SKSpecialDecimal(-2);
+                NodePointStatic = ret;
+                return ret;
+            }
             //分类-按单位数乘法和多位数乘法
             if (lines[1].Length == 2)
             {
@@ -173,6 +180,13 @@ namespace TheMathMaze
                         SKSpecialDecimal mup = new SKSpecialDecimal(lines[0].Substring(lines[0].Length - min_last_len));
                         //SKSpecialDecimal mdown = new SKSpecialDecimal(lines[2].Substring(lines[2].Length - min_last_len));
                         string left = (mup * new SKSpecialDecimal(lines[1][1].ToString())).to_string_only_integer();
+                        if (left.Length < min_last_len)
+                        {
+                            string tmpstring = "";
+                            for (int i = 0; i < min_last_len - left.Length; i++)
+                                tmpstring += "0";
+                            left = tmpstring + left;
+                        }
                         left = left.Substring(left.Length - min_last_len);
                         string right = lines[2].Substring(lines[2].Length - min_last_len);
                         if (left != right)
@@ -248,8 +262,92 @@ namespace TheMathMaze
             }
             else
             {
-                //TODO:暂时不写先
-                ret = new SKSpecialDecimal(-2);
+                //多位数乘法！
+                //按位执行单位数剪枝
+                string up = lines[0];
+                ret.reset(0);
+                int lines_len = lines[1].Length - 1;//乘法中间行数
+                for (int i = 1; i < lines[1].Length; i++)
+                {
+                    string mid = "_*" + lines[1][i];
+                    //down是从下往上数第i行
+                    string down = "_" + lines[lines.Length - i - 1];
+                    string temp_console = up + mid + down;
+                    MulEquation tmp_eq = new MulEquation(temp_console);
+                    if (tmp_eq.node_point.compare_to(0) < 0)
+                    {
+                        ret = new SKSpecialDecimal(-2);
+                        NodePointStatic = ret;
+                        return ret;
+                    }
+                    ret = ret + tmp_eq.node_point;
+                }
+                //加法剪枝
+                //目前只写一个低位剪枝先
+                int min_last_len = -1;
+                string[] last = new string[lines_len + 1];
+                for (int i = 0; i < lines_len + 1; i++)
+                {
+                    last[i] = get_last_num(lines[i + 2]);
+                    //乘法中间层补零
+                    if(i < lines_len)
+                        for (int j = 0; j < i; j++)
+                            last[i] = last[i] + '0';
+                    if (last[i].Length < min_last_len || min_last_len == -1)
+                        min_last_len = last[i].Length;
+                }
+                if (min_last_len > 0)
+                {
+                    SKSpecialDecimal tmp_add = new SKSpecialDecimal();
+                    SKSpecialDecimal left_sum = new SKSpecialDecimal(0);
+                    for (int i = 0; i < lines_len; i++)
+                    {
+                        tmp_add.reset(last[i].Substring(last[i].Length - min_last_len));
+                        left_sum = left_sum + tmp_add;
+                    }
+                    string left = left_sum.to_string_only_integer();
+                    left = left.Substring(left.Length - min_last_len);
+                    string right = last[lines_len].Substring(last[lines_len].Length - min_last_len);
+                    if (left != right)
+                    {
+                        ret = new SKSpecialDecimal(-2);
+                        NodePointStatic = ret;
+                        return ret;
+                    }
+                }
+                //计算分值返回
+                List<int> ava = available_nums();
+                if (ava.Count == 0)
+                    return new SKSpecialDecimal(0);
+                int avg = (int)Math.Round((double)ava.Sum() / ava.Count);
+                if (avg >= 10)
+                    avg = 9;
+                else if (avg <= 0)
+                    avg = 0;
+                string tmpb = equation_console;
+                for (int i = 0; i < tmpb.Length; i++)
+                    if (tmpb[i] >= 'A' && tmpb[i] <= 'J')
+                        tmpb = tmpb.Replace(tmpb[i], (char)(avg + '0'));
+                string[] _lines = tmpb.Split(new char[1] { '_' });
+                _lines[1] = _lines[1].Substring(1);
+                //只计算加法分的影响
+                SKSpecialDecimal _tmp = new SKSpecialDecimal();
+                SKSpecialDecimal _tmp_sum = new SKSpecialDecimal(0);
+                for (int i = 2; i < _lines.Length - 1; i++)
+                {
+                    _tmp.reset(_lines[i]);
+                    _tmp.mul_10(i - 2);
+                    _tmp_sum = _tmp_sum + _tmp;
+                }
+                SKSpecialDecimal _tmp_right_sum = new SKSpecialDecimal(_lines[_lines.Length - 1]);
+                ret = ret + SKSpecialDecimal.abs(_tmp_right_sum - _tmp_sum);
+                ret = SKSpecialDecimal.abs(ret) + available_letters().Count;
+                if (!ret.is_zero() && available_letters().Count == 0)
+                {
+                    ret = new SKSpecialDecimal(-2);
+                    NodePointStatic = ret;
+                    return ret;
+                }
                 NodePointStatic = ret;
                 return ret;
             }

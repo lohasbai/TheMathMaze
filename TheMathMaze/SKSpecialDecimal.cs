@@ -28,7 +28,7 @@ namespace SKSpecial
         /// <param name="x"></param>
         public SKSpecialDecimal(double x, int precision = 15)
         {
-            reset(x,precision);
+            reset(x, precision);
         }
         /// <summary>
         /// 用指定的int数初始化高精度小数，默认精度为9位
@@ -37,7 +37,7 @@ namespace SKSpecial
         /// <param name="x"></param>
         public SKSpecialDecimal(int x, int precision = 9)
         {
-            reset(x,precision);
+            reset(x, precision);
         }
         /// <summary>
         /// 用指定的string初始化高精度小数
@@ -187,7 +187,7 @@ namespace SKSpecial
                 {
                     //5“取偶”
                     bool all_zero = true;
-                    for(int i = x + 1;i < get_digit();i++)
+                    for (int i = x + 1; i < get_digit(); i++)
                         if (this[i] != 0)
                         {
                             all_zero = false;
@@ -316,9 +316,9 @@ namespace SKSpecial
                 return (positive) ? -1 : 1;
             for (int i = 0; i < Math.Min(get_digit(), x.get_digit()); i++)
             {
-                if(this[i] > x[i])
+                if (this[i] > x[i])
                     return (positive) ? 1 : -1;
-                else if(this[i] < x[i])
+                else if (this[i] < x[i])
                     return (positive) ? -1 : 1;
             }
             if (get_digit() > x.get_digit())//有效位数较多且不为零
@@ -473,7 +473,7 @@ namespace SKSpecial
             if (x.get_exp() > -1)
             {
                 for (int i = x.get_exp(); i > -1; i--)
-                    ret += (int)Math.Round(x[x.get_exp() - i] * Math.Pow(10,i));
+                    ret += (int)Math.Round(x[x.get_exp() - i] * Math.Pow(10, i));
                 if (!x.get_positive())
                     ret = ret * -1 - 1;
             }
@@ -631,7 +631,7 @@ namespace SKSpecial
                 return new SKSpecialDecimal();
             int less = Math.Min(a.get_digit(), b.get_digit());
             SKSpecialDecimal ret = mul(a, b);
-            if(CUT_IN_OPERATOR)
+            if (CUT_IN_OPERATOR)
                 ret.cut(less);
             return ret;
         }
@@ -692,7 +692,7 @@ namespace SKSpecial
                 return new SKSpecialDecimal();
             int less = Math.Min(a.get_digit(), b.get_digit());
             SKSpecialDecimal ret = div(a, b);
-            if(CUT_IN_OPERATOR)
+            if (CUT_IN_OPERATOR)
                 ret.cut(less);
             return ret;
         }
@@ -825,13 +825,13 @@ namespace SKSpecial
             byte carry = 0;
             for (int i = a.get_digit() - 1; i > -1; i--)
             {
-                byte tmp = (byte)(a[i] * b+carry);
+                byte tmp = (byte)(a[i] * b + carry);
                 ret[i + 1] = (byte)(tmp % 10);
                 carry = (byte)(tmp / 10);
             }
             ret[0] = carry;
             ret.fix();
-            if(!ret.is_zero())
+            if (!ret.is_zero())
                 ret.exp_10 = (carry == 0) ? a.get_exp() : (a.get_exp() + 1);
             return ret;
         }
