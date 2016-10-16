@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="746" Width="1366" Background="{x:Null}" WindowStyle="None" 
         MouseDown="Window_MouseDown" AllowsTransparency="True" 
-        ScrollViewer.VerticalScrollBarVisibility="Disabled" MaxHeight="746" MaxWidth="1366" MinHeight="746" MinWidth="1366">
+        ScrollViewer.VerticalScrollBarVisibility="Disabled" MaxHeight="746" MaxWidth="1366" MinHeight="746" MinWidth="1366" FontFamily="Consolas">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="681*"/>
@@ -56,15 +56,15 @@
             </Button.Template>
         </Button>
         <TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="303" Margin="0,65,0,0" 
-                 TextWrapping="Wrap" Text="FGH_*EDCB_ACEF_BJCD_BGAB_CCIJ_CFHBHIF" VerticalAlignment="Top" Width="675" AcceptsReturn="False"
-                 VerticalScrollBarVisibility="Visible" Background="#7F000000" Grid.Column="1" FontFamily="YaHei Consolas Hybrid" Foreground="White"/>
+                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="675" AcceptsReturn="False"
+                 VerticalScrollBarVisibility="Visible" Background="#7F000000" Grid.Column="1" FontFamily="Consolas" Foreground="White" TextChanged="textBox1_TextChanged"/>
         <TextBox x:Name="textBox2" HorizontalAlignment="Left" Height="363" 
                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="675" AcceptsReturn="True"
-                VerticalScrollBarVisibility="Visible" Background="#7F000000" Grid.Column="1" FontFamily="YaHei Consolas Hybrid" Foreground="White" Grid.Row="1"
+                VerticalScrollBarVisibility="Visible" Background="#7F000000" Grid.Column="1" FontFamily="Consolas" Foreground="White" Grid.Row="1"
                 IsReadOnly="True" Margin="0,10,0,0" />
-        <Button IsDefault="True" x:Name="button" Content=" Start&#13;Search" HorizontalAlignment="Left" Margin="575,292,0,0" 
+        <Button IsDefault="True" x:Name="button" Content="Start&#13;Search" HorizontalAlignment="Left" Margin="575,292,0,0" 
                 VerticalAlignment="Top" Width="96" Height="66" Background="#7FDDDDDD" Click="button_Click" HorizontalContentAlignment ="Center" FontWeight="Bold"/>
-        <Button IsDefault="True" x:Name="buttonswitch" Content="    Console&#xA;        GUI&#xA;Mode Switch" HorizontalAlignment="Left" Margin="575,65,0,0" 
+        <Button IsDefault="True" x:Name="buttonswitch" Content="  Console&#xA;    GUI&#xA;Mode Switch" HorizontalAlignment="Left" Margin="575,65,0,0" 
             VerticalAlignment="Top" Width="96" Height="66" Background="#7FDDDDDD" Click="button_switch_Click" FontWeight="Bold"/>
         <Button IsDefault="True" x:Name="buttonadd" Content="Addition" HorizontalAlignment="Left" Margin="575,136,0,0" 
             VerticalAlignment="Top" Width="96" Height="21" Background="#7FDDDDDD" Click="button_add" FontWeight="Bold"/>
@@ -79,7 +79,7 @@
         <Button IsDefault="True" x:Name="buttonsubline" Content="Delete a line" HorizontalAlignment="Left" Margin="575,266,0,0" 
             VerticalAlignment="Top" Width="96" Height="21" Background="#7FDDDDDD" Click="button_sub_line" FontWeight="Bold"/>
         <TextBox x:Name="textBoxInput" HorizontalAlignment="Left" Height="292" Margin="10,66,0,0" TextWrapping="Wrap" 
-                 Text="TextBox" VerticalAlignment="Top" Width="560" Background="#7FFFFFFF" TextAlignment="Right" />
+                 Text="TextBox" VerticalAlignment="Top" Width="560" Background="#7FFFFFFF" TextAlignment="Right" FontSize="22" FontWeight="Bold" FontFamily="Consolas" />
 
     </Grid>
 </Window>

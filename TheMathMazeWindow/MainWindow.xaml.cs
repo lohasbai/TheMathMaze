@@ -21,6 +21,7 @@ namespace TheMathMazeWindow
     /// </summary>
     public partial class MainWindow : Window
     {
+        //bool inited = false;
 
         bool _console_mode = true;
         bool console_mode
@@ -80,6 +81,8 @@ namespace TheMathMazeWindow
 
 
             console_mode = true;
+            //inited = true;
+            textBox1.Text = "FGH_*EDCB_ACEF_BJCD_BGAB_CCIJ_CFHBHIF";
             console_output("Initialize finished\r\n");
         }
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -143,6 +146,14 @@ namespace TheMathMazeWindow
         private void button_sub_line(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (console_mode)
+            {
+                textBoxInput.Text = ExpressionTranslate.get_GUI(new BaseEquation(textBox1.Text));
+            }
         }
     }
 }
