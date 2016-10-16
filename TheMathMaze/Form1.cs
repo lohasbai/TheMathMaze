@@ -20,11 +20,11 @@ namespace TheMathMaze
             //richTextBox1.BackColor = Color.Transparent;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
             textBox2.Text = "";
             DateTime t1 = DateTime.Now;
-            string ans = ConsoleMazeMain.get_result(textBox1.Text);
+            string ans = await (new ConsoleMazeMain()).get_result(textBox1.Text);
             int milisec = (int)DateTime.Now.Subtract(t1).TotalMilliseconds;
             int ans_num = ans.Split(new char[1] { '\r' }).Length - 1;
 

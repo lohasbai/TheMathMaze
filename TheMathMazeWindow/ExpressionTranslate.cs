@@ -46,7 +46,7 @@ namespace TheMathMazeWindow
                 ret += "\r\n";
                 ret += be.spilt_string[2];
             }
-            if (be.method == TheMathMaze.BaseEquation.METHOD.MUL)
+            else if (be.method == TheMathMaze.BaseEquation.METHOD.MUL)
             {
                 ret += lines[0];
                 ret += "\r\n";
@@ -85,6 +85,10 @@ namespace TheMathMazeWindow
                     ret += "\r\n";
                     ret += lines[lines.Length - 1];
                 }
+            }
+            else if (be.method == TheMathMaze.BaseEquation.METHOD.DIV)
+            {
+
             }
             return ret;
         }

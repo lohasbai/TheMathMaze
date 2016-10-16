@@ -57,7 +57,8 @@ namespace TheMathMazeWindow
                     buttonsub.IsEnabled = true;
                     buttonmul.IsEnabled = true;
                     buttondiv.IsEnabled = true;
-
+                    if (GUIMethod == BaseEquation.METHOD.DIV)
+                        GUIMethod = BaseEquation.METHOD.ADD;
                     textBoxInput.IsEnabled = true;
                     textBoxInput.Background = new SolidColorBrush(Color.FromArgb(128, 255, 255, 255));
                 }
@@ -125,17 +126,28 @@ namespace TheMathMazeWindow
             Close();
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        private async void button_Click(object sender, RoutedEventArgs e)
         {
+            button.IsEnabled = false;
             //textBox2.Text = "";
             //textBox2.AppendText(textBox1.Text + "\r\n");
+            console_output("Searching...");
             DateTime t1 = DateTime.Now;
-            string ans = ConsoleMazeMain.get_result(textBox1.Text);
+            ConsoleMazeMain cmm = new ConsoleMazeMain();
+            cmm.callback += setnow;
+            string ans = await cmm.get_result(textBox1.Text);
             int milisec = (int)DateTime.Now.Subtract(t1).TotalMilliseconds;
             string[] anss = ans.Split(new char[1] { '\r' });
-            int ans_num = (ans == "answer not found\r\n") ? 0 : (anss.Length - 1);
+            int ans_num = (ans == "answer not found\r\n" || ans == "Wrong input\r\n") ? 0 : (anss.Length - 1);
             console_output(ans + "Quest:\r\n" + textBox1.Text + "\r\n" + ans_num.ToString() + " answer(s) was(were) found.\r\n" + "Elapsed Time：" + milisec.ToString() + "ms\r\n");
-            textBoxOutput.Text = "First answer:\r\n" + ExpressionTranslate.get_GUI(new BaseEquation(anss[0]));
+            textBoxOutput.Text = "First answer:\r\n" + ExpressionTranslate.get_GUI(new BaseEquation(anss[anss.Length - 2]));
+            button.IsEnabled = true;
+        }
+
+        public void setnow(object sender, ConsoleMazeMain.BaseEquationEventArgs beea)
+        {
+            if(beea.be.equation_console != "")
+                textBoxOutput.Text = "First answer:\r\n" + ExpressionTranslate.get_GUI(new BaseEquation(beea.be.equation_console));
         }
 
         private void button_switch_Click(object sender, RoutedEventArgs e)
@@ -166,7 +178,7 @@ namespace TheMathMazeWindow
 
         private void button_div(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("除法的GUI模式未实现，请使用控制台模式");
+            MessageBox.Show("除法的GUI输入模式未实现，请使用控制台模式");
             //GUIMethod = BaseEquation.METHOD.DIV;
         }
 
@@ -320,11 +332,16 @@ namespace TheMathMazeWindow
             }
         }
 
-        string[] samples = { "ABCD_+ABED_EDCAD", "20CDE_-FGHEI_-H2C0F", "FGH_*EDCB_ACEF_BJCD_BGAB_CCIJ_CFHBHIF", "" };
-        int now_sample = 3;
+        string[] samples = {
+            "ABCD_+ABED_EDCAD",
+            "20CDE_-FGHEI_-H2C0F",
+            "FGH_*EDCB_ACEF_BJCD_BGAB_CCIJ_CFHBHIF",
+            "7BC_/DE_7F_BC_5B_DH_5E" };
+        int now_sample = 2;
         private void buttonsample_Click(object sender, RoutedEventArgs e)
         {
-            console_mode = true;
+            if(!console_mode)
+                console_mode = true;
             now_sample = (now_sample + 1) % 4;
             textBox1.Text = samples[now_sample];
         }

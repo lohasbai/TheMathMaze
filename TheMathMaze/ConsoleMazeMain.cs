@@ -8,7 +8,19 @@ namespace TheMathMaze
 {
     public class ConsoleMazeMain
     {
-        public static string get_result(string console)
+        public class BaseEquationEventArgs : EventArgs
+        {
+            public BaseEquation be;
+        }
+        public delegate void OnProcessCall(object sender, BaseEquationEventArgs e);
+        public event OnProcessCall callback;
+
+        public void upload(object sender, BaseEquationEventArgs e)
+        {
+            callback(sender, e);
+        }
+
+        public async Task<string> get_result(string console)
         {
             console = console.Replace(" ", "");
             console = console.Replace("\r", "");
@@ -29,12 +41,26 @@ namespace TheMathMaze
             }
             BaseEquation be = new BaseEquation(console);
             if (be.method == BaseEquation.METHOD.ADD)
-                return MazeAdd.get_results(be);
+            {
+                MazeAdd ma = new MazeAdd();
+                ma.callback += upload;
+                return await ma.get_results(be);
+            }
             else if (be.method == BaseEquation.METHOD.SUB)
-                return MazeSub.get_results(be);
+            {
+                MazeSub ms = new MazeSub();
+                ms.callback += upload;
+                return await ms.get_results(be);
+            }
             else if (be.method == BaseEquation.METHOD.MUL)
-                return MazeMul.get_results(be);
-            return "Wrong input";
+            {
+                MazeMul mm = new MazeMul();
+                mm.callback += upload;
+                return await mm.get_results(be);
+            }
+            else if (be.method == BaseEquation.METHOD.DIV)
+                return MazeDiv.get_results(be);
+            return "Wrong input\r\n";
         }
     }
     /// <summary>

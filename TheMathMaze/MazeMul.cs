@@ -12,7 +12,10 @@ namespace TheMathMaze
     /// </summary>
     class MazeMul
     {
-        public static string get_results(BaseEquation equation)
+        public delegate void OnProcessCall(object sender, ConsoleMazeMain.BaseEquationEventArgs e);
+        public event OnProcessCall callback;
+
+        public async Task<string> get_results(BaseEquation equation)
         {
             string ret = "answer not found\r\n";
             LinkedList<MulEquation> sorted_equation_list = new LinkedList<MulEquation>();
@@ -25,36 +28,46 @@ namespace TheMathMaze
                 {
                     break;
                 }
-                if (sorted_equation_list.First.Value.ans_found)
+                ConsoleMazeMain.BaseEquationEventArgs ee = new ConsoleMazeMain.BaseEquationEventArgs();
+                ee.be = sorted_equation_list.First.Value;
+                callback(this, ee);
+                bool bk = false;
+                await Task.Run(() =>
                 {
-                    if (ret == "answer not found\r\n")
-                        ret = "";
-                    ret += sorted_equation_list.First.Value.equation_console + "\r\n";
-                    break;
-                }
-                LinkedListNode<MulEquation> now = sorted_equation_list.First;
-                sorted_equation_list.RemoveFirst();
-                List<char> ava_l = now.Value.available_letters_from_last(1);
-                List<int> ava_n = now.Value.available_nums();
-                for (int i = 0; i < ava_n.Count; i++)
-                {
-                    if (ava_n[i] == 0)
-                    {
-                        int first_l = now.Value.get_first_in_each_line().IndexOf(ava_l[0]);
-                        if (first_l != -1 && now.Value.spilt_string_without_operator[first_l].Length > 1)
-                            continue;
-                    }
-                    string new_eva = now.Value.replace(ava_l[0], ava_n[i]);
-                    MulEquation new_eq = new MulEquation(new_eva);
-                    if (new_eq.ans_found)
+                    if (sorted_equation_list.First.Value.ans_found)
                     {
                         if (ret == "answer not found\r\n")
                             ret = "";
-                        ret += new_eq.equation_console + "\r\n";
-                        continue;
+                        ret += sorted_equation_list.First.Value.equation_console + "\r\n";
+                        bk = true;
+                        return;
                     }
-                    sorted_equation_list = sorted_insert(sorted_equation_list, calculated_equation_list, new_eq);
-                }
+                    LinkedListNode<MulEquation> now = sorted_equation_list.First;
+                    sorted_equation_list.RemoveFirst();
+                    List<char> ava_l = now.Value.available_letters_from_last(1);
+                    List<int> ava_n = now.Value.available_nums();
+                    for (int i = 0; i < ava_n.Count; i++)
+                    {
+                        if (ava_n[i] == 0)
+                        {
+                            int first_l = now.Value.get_first_in_each_line().IndexOf(ava_l[0]);
+                            if (first_l != -1 && now.Value.spilt_string_without_operator[first_l].Length > 1)
+                                continue;
+                        }
+                        string new_eva = now.Value.replace(ava_l[0], ava_n[i]);
+                        MulEquation new_eq = new MulEquation(new_eva);
+                        if (new_eq.ans_found)
+                        {
+                            if (ret == "answer not found\r\n")
+                                ret = "";
+                            ret += new_eq.equation_console + "\r\n";
+                            continue;
+                        }
+                        sorted_equation_list = sorted_insert(sorted_equation_list, calculated_equation_list, new_eq);
+                    }
+                });
+                if (bk)
+                    break;
             }
             return ret;
         }
