@@ -4,9 +4,6 @@
 # Special
 *.avi
 *.mp4
-*.jpg
-*.bmp
-*.png
 
 # User-specific files
 *.suo

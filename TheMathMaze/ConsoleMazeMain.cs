@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TheMathMaze
 {
-    class ConsoleMazeMain
+    public class ConsoleMazeMain
     {
         public static string get_result(string console)
         {
@@ -26,7 +26,7 @@ namespace TheMathMaze
     /// <summary>
     /// 一个基本方程
     /// </summary>
-    class BaseEquation
+    public class BaseEquation
     {
         /// <summary>
         /// 算式的运算法则
