@@ -40,7 +40,7 @@ namespace TheMathMazeWindow
                     buttonsub.IsEnabled = false;
                     buttonmul.IsEnabled = false;
                     buttondiv.IsEnabled = false;
-                    buttonaddline.IsEnabled = false;
+                    //buttonaddline.IsEnabled = false;
                     buttonsubline.IsEnabled = false;
 
                     textBoxInput.IsEnabled = false;
@@ -56,8 +56,7 @@ namespace TheMathMazeWindow
                     buttonadd.IsEnabled = true;
                     buttonsub.IsEnabled = true;
                     buttonmul.IsEnabled = true;
-                    //TODO:除法!!!
-                    //buttondiv.IsEnabled = true;
+                    buttondiv.IsEnabled = true;
 
                     textBoxInput.IsEnabled = true;
                     textBoxInput.Background = new SolidColorBrush(Color.FromArgb(128, 255, 255, 255));
@@ -135,7 +134,7 @@ namespace TheMathMazeWindow
             int milisec = (int)DateTime.Now.Subtract(t1).TotalMilliseconds;
             string[] anss = ans.Split(new char[1] { '\r' });
             int ans_num = (ans == "answer not found\r\n") ? 0 : (anss.Length - 1);
-            console_output(ans + "Quest:\r\n" + textBox1.Text + "\r\n" + ans_num.ToString() + " answer(s) was found.\r\n" + "Elapsed Time：" + milisec.ToString() + "ms\r\n");
+            console_output(ans + "Quest:\r\n" + textBox1.Text + "\r\n" + ans_num.ToString() + " answer(s) was(were) found.\r\n" + "Elapsed Time：" + milisec.ToString() + "ms\r\n");
             textBoxOutput.Text = "First answer:\r\n" + ExpressionTranslate.get_GUI(new BaseEquation(anss[0]));
         }
 
@@ -167,12 +166,8 @@ namespace TheMathMazeWindow
 
         private void button_div(object sender, RoutedEventArgs e)
         {
-            GUIMethod = BaseEquation.METHOD.DIV;
-        }
-
-        private void button_add_line(object sender, RoutedEventArgs e)
-        {
-
+            MessageBox.Show("除法的GUI模式未实现，请使用控制台模式");
+            //GUIMethod = BaseEquation.METHOD.DIV;
         }
 
         private void button_sub_line(object sender, RoutedEventArgs e)
@@ -323,6 +318,15 @@ namespace TheMathMazeWindow
                     }
                 }
             }
+        }
+
+        string[] samples = { "ABCD_+ABED_EDCAD", "20CDE_-FGHEI_-H2C0F", "FGH_*EDCB_ACEF_BJCD_BGAB_CCIJ_CFHBHIF", "" };
+        int now_sample = 3;
+        private void buttonsample_Click(object sender, RoutedEventArgs e)
+        {
+            console_mode = true;
+            now_sample = (now_sample + 1) % 4;
+            textBox1.Text = samples[now_sample];
         }
     }
 }

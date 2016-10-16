@@ -74,9 +74,9 @@
             VerticalAlignment="Top" Width="96" Height="21" Background="#7FDDDDDD" Click="button_mul" FontWeight="Bold"/>
         <Button IsDefault="True" x:Name="buttondiv" Content="Division" HorizontalAlignment="Left" Margin="575,214,0,0" 
             VerticalAlignment="Top" Width="96" Height="21" Background="#7FDDDDDD" Click="button_div" FontWeight="Bold"/>
-        <Button IsDefault="True" x:Name="buttonaddline" Content="Add a line" HorizontalAlignment="Left" Margin="575,240,0,0" 
-            VerticalAlignment="Top" Width="96" Height="21" Background="#7FDDDDDD" Click="button_add_line" FontWeight="Bold"/>
-        <Button IsDefault="True" x:Name="buttonsubline" Content="Delete a line" HorizontalAlignment="Left" Margin="575,266,0,0" 
+        <Button IsDefault="True" x:Name="buttonsample" Content="Next Sample" HorizontalAlignment="Left" Margin="575,240,0,0"
+            VerticalAlignment="Top" Width="96" Height="21" Background="#7FDDDDDD" Click="buttonsample_Click" FontWeight="Bold"/>
+        <Button IsDefault="True" x:Name="buttonsubline" Content="Delete a line" HorizontalAlignment="Left" Margin="575,266,0,0" Visibility="Hidden"
             VerticalAlignment="Top" Width="96" Height="21" Background="#7FDDDDDD" Click="button_sub_line" FontWeight="Bold"/>
         <TextBox x:Name="textBoxInput" HorizontalAlignment="Left" Height="297" Margin="10,66,0,0" TextWrapping="Wrap" 
                  Text="TextBox" VerticalAlignment="Top" Width="560" Background="#7FFFFFFF" TextAlignment="Right" FontSize="22" FontWeight="Bold" 
