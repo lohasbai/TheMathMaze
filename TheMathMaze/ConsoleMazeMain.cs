@@ -13,6 +13,20 @@ namespace TheMathMaze
             console = console.Replace(" ", "");
             console = console.Replace("\r", "");
             console = console.Replace("\n", "");
+            for (int i = 0; i < 16; i++)
+            {
+                if (console.IndexOf((char)('J' + i + 1)) != -1)
+                {
+                    for (int j = 0; j < 10; j++)
+                    {
+                        if (console.IndexOf((char)('A' + j)) == -1)
+                        {
+                            console.Replace((char)('J' + i + 1), (char)('A' + j));
+                            break;
+                        }
+                    }
+                }
+            }
             BaseEquation be = new BaseEquation(console);
             if (be.method == BaseEquation.METHOD.ADD)
                 return MazeAdd.get_results(be);
@@ -41,6 +55,9 @@ namespace TheMathMaze
         /// <param name="str">初始化字符串</param>
         public BaseEquation(string str)
         {
+            str = str.Replace(" ", "");
+            str = str.Replace("\r", "");
+            str = str.Replace("\n", "");
             equation_console = str;
             if (!basic_check())
                 clear();
@@ -191,7 +208,7 @@ namespace TheMathMaze
                 return false;
             }
             lines[1] = lines[1].Substring(1);
-            if (method == METHOD.SUB && lines[2][0] == '-')
+            if (method == METHOD.SUB && (lines[2] != string.Empty && lines[2][0] == '-'))
                 lines[2] = lines[2].Substring(1);
             List<char> category_already = new List<char>();
             foreach (string line in lines)

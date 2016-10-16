@@ -13,14 +13,14 @@ namespace TheMathMaze
     class MazeAdd
     {
         /// <summary>
-        /// 寻找解，找不到时返回"answer not found"
+        /// 寻找解，找不到时返回"answer not found\r\n"
         /// <para>每个解占一行</para>
         /// </summary>
         /// <param name="equation">要找的方程</param>
         /// <returns></returns>
         public static string get_results(BaseEquation equation)
         {
-            string ret = "answer not found";
+            string ret = "answer not found\r\n";
             LinkedList<AddEquation> sorted_equation_list = new LinkedList<AddEquation>();
             List<AddEquation> calculated_equation_list = new List<AddEquation>();
             AddEquation root = new AddEquation(equation);
@@ -33,7 +33,7 @@ namespace TheMathMaze
                 }
                 if (sorted_equation_list.First.Value.ans_found)
                 {
-                    if (ret == "answer not found")
+                    if (ret == "answer not found\r\n")
                         ret = "";
                     ret += sorted_equation_list.First.Value.equation_console + "\r\n";
                     break;
@@ -54,7 +54,7 @@ namespace TheMathMaze
                     AddEquation new_eq = new AddEquation(new_eva);
                     if (new_eq.ans_found)
                     {
-                        if (ret == "answer not found")
+                        if (ret == "answer not found\r\n")
                             ret = "";
                         ret += new_eq.equation_console + "\r\n";
                         continue;

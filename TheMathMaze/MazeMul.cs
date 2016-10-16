@@ -14,7 +14,7 @@ namespace TheMathMaze
     {
         public static string get_results(BaseEquation equation)
         {
-            string ret = "answer not found";
+            string ret = "answer not found\r\n";
             LinkedList<MulEquation> sorted_equation_list = new LinkedList<MulEquation>();
             List<MulEquation> calculated_equation_list = new List<MulEquation>();
             MulEquation root = new MulEquation(equation);
@@ -27,7 +27,7 @@ namespace TheMathMaze
                 }
                 if (sorted_equation_list.First.Value.ans_found)
                 {
-                    if (ret == "answer not found")
+                    if (ret == "answer not found\r\n")
                         ret = "";
                     ret += sorted_equation_list.First.Value.equation_console + "\r\n";
                     break;
@@ -48,7 +48,7 @@ namespace TheMathMaze
                     MulEquation new_eq = new MulEquation(new_eva);
                     if (new_eq.ans_found)
                     {
-                        if (ret == "answer not found")
+                        if (ret == "answer not found\r\n")
                             ret = "";
                         ret += new_eq.equation_console + "\r\n";
                         continue;
