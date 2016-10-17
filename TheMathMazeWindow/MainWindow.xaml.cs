@@ -197,6 +197,8 @@ namespace TheMathMazeWindow
                 BaseEquation be = new BaseEquation(textBox1.Text);
                 GUIMethod = be.method;
                 textBoxInput.Text = ExpressionTranslate.get_GUI(be);
+                if(textBoxInput.Text != "")
+                    textBoxInputOld = textBoxInput.Text;
             }
         }
 
