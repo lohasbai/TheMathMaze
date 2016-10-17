@@ -11,6 +11,7 @@ namespace TheMathMaze
         public class BaseEquationEventArgs : EventArgs
         {
             public BaseEquation be;
+            public bool is_ans = false;
         }
         public delegate void OnProcessCall(object sender, BaseEquationEventArgs e);
         public event OnProcessCall callback;
@@ -302,6 +303,22 @@ namespace TheMathMaze
                 {
                     int a = c - '0';
                     ret.Remove(a);
+                }
+            }
+            return ret;
+        }
+        /// <summary>
+        /// 已有的数字
+        /// </summary>
+        /// <returns></returns>
+        public List<int> have_nums()
+        {
+            List<int> ret = new List<int>();
+            foreach (char c in equation_console)
+            {
+                if (c >= '0' && c <= '9' && ret.IndexOf(c - '0') == -1)
+                {
+                    ret.Add(c - '0');
                 }
             }
             return ret;

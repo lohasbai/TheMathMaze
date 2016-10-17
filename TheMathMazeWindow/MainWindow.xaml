@@ -22,7 +22,7 @@
             <local:MinimizeCloseButton x:Name="btnClose"    Height="30" Width="30" Click="ControlBtnClick" MinimizeOrCloseStyle="Close" />
             -->
         </StackPanel>
-        <Button x:Name="BtnClose" Click="BtnClose_OnClick" Margin="626,10,9,313" Grid.Column="1" Foreground="White">
+        <Button x:Name="BtnClose" Click="BtnClose_OnClick" Margin="641,10,10,333" Grid.Column="1" Foreground="White">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Grid>
@@ -55,7 +55,7 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="298" Margin="0,65,0,0" 
+        <TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="318" Margin="0,45,0,0" 
                  TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="675" AcceptsReturn="False"
                  VerticalScrollBarVisibility="Visible" Background="#7F000000" Grid.Column="1" FontFamily="Consolas" Foreground="White" TextChanged="textBox1_TextChanged"/>
         <TextBox x:Name="textBox2" HorizontalAlignment="Left" Height="353" 
@@ -64,8 +64,8 @@
                 IsReadOnly="True" Margin="0,10,0,0" />
         <Button IsDefault="True" x:Name="button" Content="Start&#13;Search" HorizontalAlignment="Left" Margin="575,292,0,0" 
                 VerticalAlignment="Top" Width="96" Height="71" Background="#7FDDDDDD" Click="button_Click" HorizontalContentAlignment ="Center" FontWeight="Bold"/>
-        <Button IsDefault="True" x:Name="buttonswitch" Content="  Console&#xA;    GUI&#xA;Mode Switch" HorizontalAlignment="Left" Margin="575,65,0,0" 
-            VerticalAlignment="Top" Width="96" Height="66" Background="#7FDDDDDD" Click="button_switch_Click" FontWeight="Bold"/>
+        <Button IsDefault="True" x:Name="buttonswitch" Content="  Console&#xA;    GUI&#xA;Mode Switch" HorizontalAlignment="Left" Margin="575,45,0,0" 
+            VerticalAlignment="Top" Width="96" Height="86" Background="#7FDDDDDD" Click="button_switch_Click" FontWeight="Bold"/>
         <Button IsDefault="True" x:Name="buttonadd" Content="Addition" HorizontalAlignment="Left" Margin="575,136,0,0" 
             VerticalAlignment="Top" Width="96" Height="21" Background="#7FDDDDDD" Click="button_add" FontWeight="Bold"/>
         <Button IsDefault="True" x:Name="buttonsub" Content="Subtraction" HorizontalAlignment="Left" Margin="575,162,0,0" 
@@ -76,13 +76,13 @@
             VerticalAlignment="Top" Width="96" Height="21" Background="#7FDDDDDD" Click="button_div" FontWeight="Bold"/>
         <Button IsDefault="True" x:Name="buttonsample" Content="Next Sample" HorizontalAlignment="Left" Margin="575,240,0,0"
             VerticalAlignment="Top" Width="96" Height="21" Background="#7FDDDDDD" Click="buttonsample_Click" FontWeight="Bold"/>
-        <Button IsDefault="True" x:Name="buttonsubline" Content="Delete a line" HorizontalAlignment="Left" Margin="575,266,0,0" Visibility="Hidden"
-            VerticalAlignment="Top" Width="96" Height="21" Background="#7FDDDDDD" Click="button_sub_line" FontWeight="Bold"/>
-        <TextBox x:Name="textBoxInput" HorizontalAlignment="Left" Height="297" Margin="10,66,0,0" TextWrapping="Wrap" 
+        <Button IsDefault="True" x:Name="buttonchallenge" Content="Challenge!" HorizontalAlignment="Left" Margin="575,266,0,0" 
+            VerticalAlignment="Top" Width="96" Height="21" Background="#7FDDDDDD" Click="button_challenge" FontWeight="Bold"/>
+        <TextBox x:Name="textBoxInput" HorizontalAlignment="Left" Height="318" Margin="10,45,0,0" TextWrapping="Wrap" 
                  Text="TextBox" VerticalAlignment="Top" Width="560" Background="#7FFFFFFF" TextAlignment="Right" FontSize="22" FontWeight="Bold" 
-                 FontFamily="Consolas" TextChanged="textBoxInput_TextChanged"/>
+                 FontFamily="Consolas" TextChanged="textBoxInput_TextChanged" Foreground="White"/>
         <TextBox x:Name="textBoxOutput" HorizontalAlignment="Left" Height="353" Margin="10,10,0,0" TextWrapping="Wrap" IsReadOnly="True"
-                 Text="First answer:" VerticalAlignment="Top" Width="661" Background="#7FFFFFFF" TextAlignment="Right" FontSize="22" FontWeight="Bold" FontFamily="Consolas" Grid.Row="1" />
+                 Text="First answer:" VerticalAlignment="Top" Width="661" Background="#7F000000" TextAlignment="Right" FontSize="22" FontWeight="Bold" FontFamily="Consolas" Grid.Row="1" Foreground="White" />
 
     </Grid>
 </Window>

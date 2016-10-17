@@ -10,7 +10,7 @@ namespace TheMathMaze
     /// <summary>
     /// 乘法有很多复杂的情况暂且不论，比如乘0什么的……（搞事情……）
     /// </summary>
-    class MazeMul
+    public class MazeMul
     {
         public delegate void OnProcessCall(object sender, ConsoleMazeMain.BaseEquationEventArgs e);
         public event OnProcessCall callback;
@@ -22,6 +22,8 @@ namespace TheMathMaze
             List<MulEquation> calculated_equation_list = new List<MulEquation>();
             MulEquation root = new MulEquation(equation);
             sorted_equation_list = sorted_insert(sorted_equation_list, calculated_equation_list, root);
+            MulEquation first_ans = null;
+            bool already_first = false;
             while (true)
             {
                 if (sorted_equation_list.Count == 0)
@@ -37,7 +39,10 @@ namespace TheMathMaze
                     if (sorted_equation_list.First.Value.ans_found)
                     {
                         if (ret == "answer not found\r\n")
+                        {
+                            first_ans = sorted_equation_list.First.Value;
                             ret = "";
+                        }
                         ret += sorted_equation_list.First.Value.equation_console + "\r\n";
                         bk = true;
                         return;
@@ -59,13 +64,24 @@ namespace TheMathMaze
                         if (new_eq.ans_found)
                         {
                             if (ret == "answer not found\r\n")
+                            {
+                                first_ans = new_eq;
                                 ret = "";
+                            }
                             ret += new_eq.equation_console + "\r\n";
                             continue;
                         }
                         sorted_equation_list = sorted_insert(sorted_equation_list, calculated_equation_list, new_eq);
                     }
                 });
+                if (first_ans != null && !already_first)
+                {
+                    ConsoleMazeMain.BaseEquationEventArgs ee2 = new ConsoleMazeMain.BaseEquationEventArgs();
+                    ee2.be = first_ans;
+                    ee2.is_ans = true;
+                    callback(this, ee2);
+                    already_first = true;
+                }
                 if (bk)
                     break;
             }
@@ -319,6 +335,13 @@ namespace TheMathMaze
                         left_sum = left_sum + tmp_add;
                     }
                     string left = left_sum.to_string_only_integer();
+                    if (left.Length < min_last_len)
+                    {
+                        string tmpstring = "";
+                        for (int i = 0; i < min_last_len - left.Length; i++)
+                            tmpstring += "0";
+                        left = tmpstring + left;
+                    }
                     left = left.Substring(left.Length - min_last_len);
                     string right = last[lines_len].Substring(last[lines_len].Length - min_last_len);
                     if (left != right)

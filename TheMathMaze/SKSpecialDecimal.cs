@@ -413,6 +413,7 @@ namespace SKSpecial
         public string to_string_only_integer()
         {
             string ret = "";
+            fix();
             if (data.Count == 0)
                 return ret;
             if (exp_10 < 0)
@@ -420,7 +421,7 @@ namespace SKSpecial
             if (!positive)
                 ret += "-";
             for (int i = 0; i < exp_10 + 1; i++)
-                ret += data[i].ToString();
+                ret += this[i].ToString();
             return ret;
         }
 

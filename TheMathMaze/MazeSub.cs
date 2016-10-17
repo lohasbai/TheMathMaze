@@ -7,7 +7,7 @@ using SKSpecial;
 
 namespace TheMathMaze
 {
-    class MazeSub
+    public class MazeSub
     {
         public delegate void OnProcessCall(object sender, ConsoleMazeMain.BaseEquationEventArgs e);
         public event OnProcessCall callback;
@@ -25,6 +25,8 @@ namespace TheMathMaze
             List<SubEquation> calculated_equation_list = new List<SubEquation>();
             SubEquation root = new SubEquation(equation);
             sorted_equation_list = sorted_insert(sorted_equation_list, calculated_equation_list, root);
+            SubEquation first_ans = null;
+            bool already_first = false;
             while (true)
             {
                 if (sorted_equation_list.Count == 0)
@@ -40,7 +42,10 @@ namespace TheMathMaze
                     if (sorted_equation_list.First.Value.ans_found)
                     {
                         if (ret == "answer not found\r\n")
+                        {
+                            first_ans = sorted_equation_list.First.Value;
                             ret = "";
+                        }
                         ret += sorted_equation_list.First.Value.equation_console + "\r\n";
                         bk = true;
                         return;
@@ -62,13 +67,24 @@ namespace TheMathMaze
                         if (new_eq.ans_found)
                         {
                             if (ret == "answer not found\r\n")
+                            {
+                                first_ans = new_eq;
                                 ret = "";
+                            }
                             ret += new_eq.equation_console + "\r\n";
                             continue;
                         }
                         sorted_equation_list = sorted_insert(sorted_equation_list, calculated_equation_list, new_eq);
                     }
                 });
+                if (first_ans != null && !already_first)
+                {
+                    ConsoleMazeMain.BaseEquationEventArgs ee2 = new ConsoleMazeMain.BaseEquationEventArgs();
+                    ee2.be = first_ans;
+                    ee2.is_ans = true;
+                    callback(this, ee2);
+                    already_first = true;
+                }
                 if (bk)
                     break;
             }

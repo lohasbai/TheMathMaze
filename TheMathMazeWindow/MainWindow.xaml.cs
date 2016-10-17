@@ -41,7 +41,7 @@ namespace TheMathMazeWindow
                     buttonmul.IsEnabled = false;
                     buttondiv.IsEnabled = false;
                     //buttonaddline.IsEnabled = false;
-                    buttonsubline.IsEnabled = false;
+                    buttonchallenge.IsEnabled = false;
 
                     textBoxInput.IsEnabled = false;
                     textBoxInput.Background = new SolidColorBrush(Color.FromArgb(128, 128, 128, 128));
@@ -57,10 +57,11 @@ namespace TheMathMazeWindow
                     buttonsub.IsEnabled = true;
                     buttonmul.IsEnabled = true;
                     buttondiv.IsEnabled = true;
+                    buttonchallenge.IsEnabled = true;
                     if (GUIMethod == BaseEquation.METHOD.DIV)
                         GUIMethod = BaseEquation.METHOD.ADD;
                     textBoxInput.IsEnabled = true;
-                    textBoxInput.Background = new SolidColorBrush(Color.FromArgb(128, 255, 255, 255));
+                    textBoxInput.Background = new SolidColorBrush(Color.FromArgb(128, 0, 0, 0));
                 }
                 _console_mode = value;
             }
@@ -125,14 +126,14 @@ namespace TheMathMazeWindow
         {
             Close();
         }
-
+        DateTime t1 = DateTime.Now;
         private async void button_Click(object sender, RoutedEventArgs e)
         {
             button.IsEnabled = false;
             //textBox2.Text = "";
             //textBox2.AppendText(textBox1.Text + "\r\n");
             console_output("Searching...");
-            DateTime t1 = DateTime.Now;
+            t1 = DateTime.Now;
             ConsoleMazeMain cmm = new ConsoleMazeMain();
             cmm.callback += setnow;
             string ans = await cmm.get_result(textBox1.Text);
@@ -140,14 +141,21 @@ namespace TheMathMazeWindow
             string[] anss = ans.Split(new char[1] { '\r' });
             int ans_num = (ans == "answer not found\r\n" || ans == "Wrong input\r\n") ? 0 : (anss.Length - 1);
             console_output(ans + "Quest:\r\n" + textBox1.Text + "\r\n" + ans_num.ToString() + " answer(s) was(were) found.\r\n" + "Elapsed Time：" + milisec.ToString() + "ms\r\n");
-            textBoxOutput.Text = "First answer:\r\n" + ExpressionTranslate.get_GUI(new BaseEquation(anss[anss.Length - 2]));
+            textBoxOutput.Text = "First answer:\r\n" + ExpressionTranslate.get_GUI(new BaseEquation(anss[0]));
             button.IsEnabled = true;
         }
 
         public void setnow(object sender, ConsoleMazeMain.BaseEquationEventArgs beea)
         {
-            if(beea.be.equation_console != "")
+            if (beea.be.equation_console != "" && beea.is_ans == false)
                 textBoxOutput.Text = "First answer:\r\n" + ExpressionTranslate.get_GUI(new BaseEquation(beea.be.equation_console));
+            else
+            {
+                console_output("The first answer was found:");
+                console_output(beea.be.equation_console);
+                int milisec = (int)DateTime.Now.Subtract(t1).TotalMilliseconds;
+                console_output("First Answer Elapsed Time：" + milisec.ToString() + "ms\r\n");
+            }
         }
 
         private void button_switch_Click(object sender, RoutedEventArgs e)
@@ -182,11 +190,6 @@ namespace TheMathMazeWindow
             //GUIMethod = BaseEquation.METHOD.DIV;
         }
 
-        private void button_sub_line(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void textBox1_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (console_mode)
@@ -197,7 +200,7 @@ namespace TheMathMazeWindow
             }
         }
 
-        string textBoxInputOld = "";
+        string textBoxInputOld = ExpressionTranslate.get_GUI(new BaseEquation("FGH_*EDCB_ACEF_BJCD_BGAB_CCIJ_CFHBHIF"));
         /// <summary>
         /// 指示当前的change操作是后台还是人为操作
         /// </summary>
@@ -344,6 +347,21 @@ namespace TheMathMazeWindow
                 console_mode = true;
             now_sample = (now_sample + 1) % 4;
             textBox1.Text = samples[now_sample];
+        }
+
+        Random r = new Random();
+        int hard = 0;
+        private async void button_challenge(object sender, RoutedEventArgs e)
+        {
+            console_output("Generating your quest...");
+            buttonchallenge.IsEnabled = false;
+            button.IsEnabled = false;
+            string GUI = await ExpressionTranslate.GUIrandomChallenge(hard, GUIMethod, r);
+            textBoxInput.Text = GUI;
+            console_output("Quest generated!\r\n");
+            buttonchallenge.IsEnabled = true;
+            button.IsEnabled = true;
+            hard = (hard + 1) % 3;
         }
     }
 }

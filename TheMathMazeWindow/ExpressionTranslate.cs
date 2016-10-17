@@ -11,7 +11,7 @@ namespace TheMathMazeWindow
     /// </summary>
     class ExpressionTranslate
     {
-        public const int HEIGHT_MAX = 10;
+        public const int HEIGHT_MAX = 20;
         public const int LENTH_MAX = 40;
 
         public static string get_GUI(TheMathMaze.BaseEquation be)
@@ -251,6 +251,195 @@ namespace TheMathMazeWindow
             }
             TheMathMaze.BaseEquation be = new TheMathMaze.BaseEquation(mix_str);
             return (be.equation_console != string.Empty) ? 0 : 1;
+        }
+
+        /// <summary>
+        /// hard = 0,1,2
+        /// </summary>
+        /// <param name="hard"></param>
+        /// <returns></returns>
+        public static async Task<string> GUIrandomChallenge(int hard,TheMathMaze.BaseEquation.METHOD m,Random r)
+        {
+            string ret = "";
+            int t1, t2;
+            switch (hard)
+            {
+                case 0:
+                    t1 = r.Next(1, 5);
+                    t2 = r.Next(1, 3);
+                    break;
+                case 1:
+                    t1 = r.Next(2, 7);
+                    t2 = r.Next(2, 5);
+                    break;
+                case 2:
+                    t1 = r.Next(4, 9);
+                    t2 = r.Next(4, 7);
+                    break;
+                default:
+                    t1 = r.Next(1, 15);
+                    t2 = r.Next(1, 15);
+                    break;
+            }
+            switch (m)
+            {
+                case TheMathMaze.BaseEquation.METHOD.ADD:
+                    {
+                        string a1 = "", a2 = "";
+                        for (int i = 0; i < t1; i++)
+                        {
+                            a1 += '0' + r.Next(0, 10);
+                        }
+                        for (int i = 0; i < t2; i++)
+                        {
+                            a2 += '0' + r.Next(0, 10);
+                        }
+                        string a3 = (new SKSpecial.SKSpecialDecimal(a1) + new SKSpecial.SKSpecialDecimal(a2)).to_string_only_integer();
+                        string mix = a1 + "_+" + a2 + "_" + a3;
+                        string last_mix = mix;
+                        int already_letter = 0;
+                        while (true)
+                        {
+                            TheMathMaze.BaseEquation be = new TheMathMaze.BaseEquation(mix);
+                            List<int> hav_n = be.have_nums();
+                            if (hav_n.Count == 0)
+                            {
+                                last_mix = mix;
+                                break;
+                            }
+                            mix = mix.Replace((char)(hav_n[r.Next(0, hav_n.Count)] + '0'),
+                                (char)('A' + already_letter));
+                            already_letter++;
+                            TheMathMaze.ConsoleMazeMain cm = new TheMathMaze.ConsoleMazeMain();
+                            cm.callback += voidm;
+                            string ans = await cm.get_result(mix);
+                            string[] anss = ans.Split(new char[1] { '\r' });
+                            int ans_num = (ans == "answer not found\r\n" || ans == "Wrong input\r\n") ? 0 : (anss.Length - 1);
+                            if (ans_num == 0 || ans_num > 1)
+                            {
+                                break;
+                            }
+                            last_mix = mix;
+                        }
+                        if (new TheMathMaze.BaseEquation(last_mix).available_letters().Count <= 1)
+                            ret = await GUIrandomChallenge(hard, m, r);
+                        else
+                            ret = get_GUI(new TheMathMaze.BaseEquation(last_mix));
+                        break;
+                    }
+                case TheMathMaze.BaseEquation.METHOD.SUB:
+                    {
+                        string a1 = "", a2 = "";
+                        for (int i = 0; i < t1; i++)
+                        {
+                            a1 += '0' + r.Next(0, 10);
+                        }
+                        for (int i = 0; i < t2; i++)
+                        {
+                            a2 += '0' + r.Next(0, 10);
+                        }
+                        string a3 = (new SKSpecial.SKSpecialDecimal(a1) - new SKSpecial.SKSpecialDecimal(a2)).to_string_only_integer();
+                        string mix = a1 + "_-" + a2 + "_" + a3;
+                        string last_mix = mix;
+                        int already_letter = 0;
+                        while (true)
+                        {
+                            TheMathMaze.BaseEquation be = new TheMathMaze.BaseEquation(mix);
+                            List<int> hav_n = be.have_nums();
+                            if (hav_n.Count == 0)
+                            {
+                                last_mix = mix;
+                                break;
+                            }
+                            mix = mix.Replace((char)(hav_n[r.Next(0, hav_n.Count)] + '0'),
+                                (char)('A' + already_letter));
+                            already_letter++;
+                            TheMathMaze.ConsoleMazeMain cm = new TheMathMaze.ConsoleMazeMain();
+                            cm.callback += voidm;
+                            string ans = await cm.get_result(mix);
+                            string[] anss = ans.Split(new char[1] { '\r' });
+                            int ans_num = (ans == "answer not found\r\n" || ans == "Wrong input\r\n") ? 0 : (anss.Length - 1);
+                            if (ans_num == 0 || ans_num > 1)
+                            {
+                                break;
+                            }
+                            last_mix = mix;
+                        }
+                        if (new TheMathMaze.BaseEquation(last_mix).available_letters().Count <= 1)
+                            ret = await GUIrandomChallenge(hard, m, r);
+                        else
+                            ret = get_GUI(new TheMathMaze.BaseEquation(last_mix));
+                        break;
+                    }
+                case TheMathMaze.BaseEquation.METHOD.MUL:
+                    {
+                        SKSpecial.SKSpecialDecimal aa1;
+                        SKSpecial.SKSpecialDecimal aa2;
+                        try
+                        {
+                            string a1 = "", a2 = "";
+                            for (int i = 0; i < t1; i++)
+                            {
+                                a1 += '0' + r.Next(0, 10);
+                            }
+                            for (int i = 0; i < t2; i++)
+                            {
+                                a2 += '0' + r.Next(0, 10);
+                            }
+                            string mix = a1 + "_*" + a2;
+                            aa1 = new SKSpecial.SKSpecialDecimal(a1);
+                            aa2 = new SKSpecial.SKSpecialDecimal(a2);
+                            if (a2.Length > 1)
+                            {
+                                for (int i = 0; i < a2.Length; i++)
+                                {
+                                    mix = mix + "_" + (aa1 * (int)(a2[a2.Length - i - 1] - '0')).to_string_only_integer();
+                                }
+                            }
+                            mix = mix + "_" + (aa1 * aa2).to_string_only_integer();
+                            string last_mix = mix;
+                            int already_letter = 0;
+                            while (true)
+                            {
+                                TheMathMaze.BaseEquation be = new TheMathMaze.BaseEquation(mix);
+                                List<int> hav_n = be.have_nums();
+                                if (hav_n.Count == 0)
+                                {
+                                    last_mix = mix;
+                                    break;
+                                }
+                                mix = mix.Replace((char)(hav_n[r.Next(0, hav_n.Count)] + '0'),
+                                    (char)('A' + already_letter));
+                                already_letter++;
+                                TheMathMaze.ConsoleMazeMain cm = new TheMathMaze.ConsoleMazeMain();
+                                cm.callback += voidm;
+                                string ans = await cm.get_result(mix);
+                                string[] anss = ans.Split(new char[1] { '\r' });
+                                int ans_num = (ans == "answer not found\r\n" || ans == "Wrong input\r\n") ? 0 : (anss.Length - 1);
+                                if (ans_num == 0 || ans_num > 1)
+                                {
+                                    break;
+                                }
+                                last_mix = mix;
+                            }
+                            if (new TheMathMaze.BaseEquation(last_mix).available_letters().Count <= 1)
+                                ret = await GUIrandomChallenge(hard, m, r);
+                            else
+                                ret = get_GUI(new TheMathMaze.BaseEquation(last_mix));
+                            break;
+                        }
+                        catch (Exception e)
+                        {
+                            return "";
+                        }
+                    }
+            }
+            return ret;
+        }
+
+        public static void voidm(object sender, TheMathMaze.ConsoleMazeMain.BaseEquationEventArgs beea)
+        {
+            
         }
     }
 }

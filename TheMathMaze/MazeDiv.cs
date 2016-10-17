@@ -10,7 +10,7 @@ namespace TheMathMaze
     /// <summary>
     /// 除法也有很多情况…… 只求不要搞事情
     /// </summary>
-    class MazeDiv
+    public class MazeDiv
     {
         public static string get_results(BaseEquation equation)
         {
