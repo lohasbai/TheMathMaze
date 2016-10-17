@@ -231,6 +231,8 @@ namespace TheMathMazeWindow
                     if (is_mul && i >= 4 && i <= lines_textbox.Length - 3)
                     {
                         //右边应当有(i-3)个空格
+                        if (lines_textbox[i].Length < i - 3)
+                            return 1;
                         for (int j = 0; j < i - 3; j++)
                         {
                             if (lines_textbox[i][lines_textbox[i].Length - j - 1] != ' ')
