@@ -10,57 +10,92 @@ namespace TheMathMaze
     /// <summary>
     /// 加法算式搜索
     /// </summary>
-    class MazeAdd
+    public class MazeAdd
     {
+        public delegate void OnProcessCall(object sender, ConsoleMazeMain.BaseEquationEventArgs e);
+        public event OnProcessCall callback;
+
         /// <summary>
-        /// 寻找解，找不到时返回"answer not found"
+        /// 寻找解，找不到时返回"answer not found\r\n"
         /// <para>每个解占一行</para>
         /// </summary>
         /// <param name="equation">要找的方程</param>
         /// <returns></returns>
-        public static string get_results(BaseEquation equation)
+        public async Task<string> get_results(BaseEquation equation)
         {
-            string ret = "answer not found";
+            string ret = "answer not found\r\n";
             LinkedList<AddEquation> sorted_equation_list = new LinkedList<AddEquation>();
             List<AddEquation> calculated_equation_list = new List<AddEquation>();
             AddEquation root = new AddEquation(equation);
             sorted_equation_list = sorted_insert(sorted_equation_list, calculated_equation_list, root);
+            AddEquation first_ans = null;
+            bool already_first = false;
             while (true)
             {
                 if (sorted_equation_list.Count == 0)
                 {
                     break;
                 }
-                if (sorted_equation_list.First.Value.ans_found)
+                ConsoleMazeMain.BaseEquationEventArgs ee = new ConsoleMazeMain.BaseEquationEventArgs();
+                ee.be = sorted_equation_list.First.Value;
+                callback(this, ee);
+                bool bk = false;
+                await Task.Run(() =>
                 {
-                    if (ret == "answer not found")
-                        ret = "";
-                    ret += sorted_equation_list.First.Value.equation_console + "\r\n";
-                    break;
-                }
-                LinkedListNode<AddEquation> now = sorted_equation_list.First;
-                sorted_equation_list.RemoveFirst();
-                List<char> ava_l = now.Value.available_letters_from_last();
-                List<int> ava_n = now.Value.available_nums();
-                for (int i = 0; i < ava_n.Count; i++)
-                {
-                    if (ava_n[i] == 0)
+                    //if (sorted_equation_list.Count == 0)
+                    //{
+                    //    bk = true;
+                    //    return;
+                    //}
+                    if (sorted_equation_list.First.Value.ans_found)
                     {
-                        int first_l = now.Value.get_first_in_each_line().IndexOf(ava_l[0]);
-                        if (first_l != -1 && now.Value.spilt_string_without_operator[first_l].Length > 1)
-                            continue;
-                }
-                    string new_eva = now.Value.replace(ava_l[0], ava_n[i]);
-                    AddEquation new_eq = new AddEquation(new_eva);
-                    if (new_eq.ans_found)
-                    {
-                        if (ret == "answer not found")
+                        if (ret == "answer not found\r\n")
+                        {
+                            first_ans = sorted_equation_list.First.Value;
                             ret = "";
-                        ret += new_eq.equation_console + "\r\n";
-                        continue;
+                        }
+                        ret += sorted_equation_list.First.Value.equation_console + "\r\n";
+                        bk = true;
+                        return;
                     }
-                    sorted_equation_list = sorted_insert(sorted_equation_list, calculated_equation_list, new_eq);
+                    LinkedListNode<AddEquation> now = sorted_equation_list.First;
+                    sorted_equation_list.RemoveFirst();
+                    List<char> ava_l = now.Value.available_letters_from_last();
+                    List<int> ava_n = now.Value.available_nums();
+                    for (int i = 0; i < ava_n.Count; i++)
+                    {
+                        if (ava_n[i] == 0)
+                        {
+                            int first_l = now.Value.get_first_in_each_line().IndexOf(ava_l[0]);
+                            if (first_l != -1 && now.Value.spilt_string_without_operator[first_l].Length > 1)
+                                continue;
+                        }
+                        string new_eva = now.Value.replace(ava_l[0], ava_n[i]);
+                        AddEquation new_eq = new AddEquation(new_eva);
+                        if (new_eq.ans_found)
+                        {
+                            if (ret == "answer not found\r\n")
+                            {
+                                first_ans = new_eq;
+                                ret = "";
+                            }
+                            ret += new_eq.equation_console + "\r\n";
+                            continue;
+                        }
+                        sorted_equation_list = sorted_insert(sorted_equation_list, calculated_equation_list, new_eq);
+                    }
+                });
+                if (first_ans != null && !already_first)
+                {
+                    ConsoleMazeMain.BaseEquationEventArgs ee2 = new ConsoleMazeMain.BaseEquationEventArgs();
+                    ee2.be = first_ans;
+                    ee2.is_ans = true;
+                    callback(this, ee2);
+                    already_first = true;
                 }
+
+                if (bk)
+                    break;
             }
             return ret;
         }

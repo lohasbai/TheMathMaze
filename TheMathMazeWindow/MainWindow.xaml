@@ -1,0 +1,88 @@
+﻿<Window x:Class="TheMathMazeWindow.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="746" Width="1366" Background="{x:Null}" WindowStyle="None" 
+        MouseDown="Window_MouseDown" AllowsTransparency="True" 
+        ScrollViewer.VerticalScrollBarVisibility="Disabled" MaxHeight="746" MaxWidth="1366" MinHeight="746" MinWidth="1366" FontFamily="Consolas">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="681*"/>
+            <ColumnDefinition Width="685*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="374*"/>
+            <RowDefinition Height="373*"/>
+        </Grid.RowDefinitions>
+        <Grid.Background>
+            <ImageBrush ImageSource="logo7.jpg" TileMode="Tile"/>
+        </Grid.Background>
+        <StackPanel HorizontalAlignment="Right" Margin="0,0,4,0" Orientation="Horizontal" Grid.RowSpan="2" Grid.Column="1" >
+            <!--
+            <local:MinimizeCloseButton x:Name="btnMinimize" Height="30" Width="30" Click="ControlBtnClick" MinimizeOrCloseStyle="Minimize" />
+            <local:MinimizeCloseButton x:Name="btnClose"    Height="30" Width="30" Click="ControlBtnClick" MinimizeOrCloseStyle="Close" />
+            -->
+        </StackPanel>
+        <Button x:Name="BtnClose" Click="BtnClose_OnClick" Margin="641,10,10,333" Grid.Column="1" Foreground="White">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Grid x:Name="Uc_Grid" VerticalAlignment="Center" Height="25" Width="25">
+                            <Path x:Name="Uc_Path1" Stroke="DodgerBlue" StrokeThickness="4" Data="M0,0 L20,20" VerticalAlignment="Center" HorizontalAlignment="Center"></Path>
+                            <Path x:Name="Uc_Path2" Stroke="DodgerBlue" StrokeThickness="4" Data="M20,0 L0,20" VerticalAlignment="Center" HorizontalAlignment="Center"></Path>
+                            <Grid.RenderTransform>
+                                <RotateTransform x:Name="Uc_Transform" Angle="0" CenterY="12.5" CenterX="12.5"></RotateTransform>
+                            </Grid.RenderTransform>
+                        </Grid>
+                        <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}"></ContentPresenter>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Uc_Path1" Property="Data" Value="M0,0 L22,22"></Setter>
+                            <Setter TargetName="Uc_Path2" Property="Data" Value="M22,0 L0,22"></Setter>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Uc_Path1" Property="Data" Value="M0,0 L24,24"></Setter>
+                            <Setter TargetName="Uc_Path2" Property="Data" Value="M24,0 L0,24"></Setter>
+                        </Trigger>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard HandoffBehavior="SnapshotAndReplace">
+                                <Storyboard TargetName="Uc_Transform" TargetProperty="Angle">
+                                    <DoubleAnimation From="0" To="90" Duration="0:0:0.1"></DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="318" Margin="0,45,0,0" 
+                 TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="675" AcceptsReturn="False"
+                 VerticalScrollBarVisibility="Visible" Background="#7F000000" Grid.Column="1" FontFamily="Consolas" Foreground="White" TextChanged="textBox1_TextChanged"/>
+        <TextBox x:Name="textBox2" HorizontalAlignment="Left" Height="353" 
+                TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="675" AcceptsReturn="True"
+                VerticalScrollBarVisibility="Visible" Background="#7F000000" Grid.Column="1" FontFamily="Consolas" Foreground="White" Grid.Row="1"
+                IsReadOnly="True" Margin="0,10,0,0" />
+        <Button IsDefault="True" x:Name="button" Content="Start&#13;Search" HorizontalAlignment="Left" Margin="575,292,0,0" 
+                VerticalAlignment="Top" Width="96" Height="71" Background="#7FDDDDDD" Click="button_Click" HorizontalContentAlignment ="Center" FontWeight="Bold"/>
+        <Button IsDefault="True" x:Name="buttonswitch" Content="  Console&#xA;    GUI&#xA;Mode Switch" HorizontalAlignment="Left" Margin="575,45,0,0" 
+            VerticalAlignment="Top" Width="96" Height="86" Background="#7FDDDDDD" Click="button_switch_Click" FontWeight="Bold"/>
+        <Button IsDefault="True" x:Name="buttonadd" Content="Addition" HorizontalAlignment="Left" Margin="575,136,0,0" 
+            VerticalAlignment="Top" Width="96" Height="21" Background="#7FDDDDDD" Click="button_add" FontWeight="Bold"/>
+        <Button IsDefault="True" x:Name="buttonsub" Content="Subtraction" HorizontalAlignment="Left" Margin="575,162,0,0" 
+            VerticalAlignment="Top" Width="96" Height="21" Background="#7FDDDDDD" Click="button_sub" FontWeight="Bold"/>
+        <Button IsDefault="True" x:Name="buttonmul" Content="Multiplication" HorizontalAlignment="Left" Margin="575,188,0,0" 
+            VerticalAlignment="Top" Width="96" Height="21" Background="#7FDDDDDD" Click="button_mul" FontWeight="Bold"/>
+        <Button IsDefault="True" x:Name="buttondiv" Content="Division" HorizontalAlignment="Left" Margin="575,214,0,0" 
+            VerticalAlignment="Top" Width="96" Height="21" Background="#7FDDDDDD" Click="button_div" FontWeight="Bold"/>
+        <Button IsDefault="True" x:Name="buttonsample" Content="Next Sample" HorizontalAlignment="Left" Margin="575,240,0,0"
+            VerticalAlignment="Top" Width="96" Height="21" Background="#7FDDDDDD" Click="buttonsample_Click" FontWeight="Bold"/>
+        <Button IsDefault="True" x:Name="buttonchallenge" Content="Challenge!" HorizontalAlignment="Left" Margin="575,266,0,0" 
+            VerticalAlignment="Top" Width="96" Height="21" Background="#7FDDDDDD" Click="button_challenge" FontWeight="Bold"/>
+        <TextBox x:Name="textBoxInput" HorizontalAlignment="Left" Height="318" Margin="10,45,0,0" TextWrapping="Wrap" 
+                 Text="TextBox" VerticalAlignment="Top" Width="560" Background="#7FFFFFFF" TextAlignment="Right" FontSize="22" FontWeight="Bold" 
+                 FontFamily="Consolas" TextChanged="textBoxInput_TextChanged" Foreground="White"/>
+        <TextBox x:Name="textBoxOutput" HorizontalAlignment="Left" Height="353" Margin="10,10,0,0" TextWrapping="Wrap" IsReadOnly="True"
+                 Text="First answer:" VerticalAlignment="Top" Width="661" Background="#7F000000" TextAlignment="Right" FontSize="22" FontWeight="Bold" FontFamily="Consolas" Grid.Row="1" Foreground="White" />
+
+    </Grid>
+</Window>

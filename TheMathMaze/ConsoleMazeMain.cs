@@ -6,27 +6,68 @@ using System.Threading.Tasks;
 
 namespace TheMathMaze
 {
-    class ConsoleMazeMain
+    public class ConsoleMazeMain
     {
-        public static string get_result(string console)
+        public class BaseEquationEventArgs : EventArgs
+        {
+            public BaseEquation be;
+            public bool is_ans = false;
+        }
+        public delegate void OnProcessCall(object sender, BaseEquationEventArgs e);
+        public event OnProcessCall callback;
+
+        public void upload(object sender, BaseEquationEventArgs e)
+        {
+            callback(sender, e);
+        }
+
+        public async Task<string> get_result(string console)
         {
             console = console.Replace(" ", "");
             console = console.Replace("\r", "");
             console = console.Replace("\n", "");
+            for (int i = 0; i < 16; i++)
+            {
+                if (console.IndexOf((char)('J' + i + 1)) != -1)
+                {
+                    for (int j = 0; j < 10; j++)
+                    {
+                        if (console.IndexOf((char)('A' + j)) == -1)
+                        {
+                            console.Replace((char)('J' + i + 1), (char)('A' + j));
+                            break;
+                        }
+                    }
+                }
+            }
             BaseEquation be = new BaseEquation(console);
             if (be.method == BaseEquation.METHOD.ADD)
-                return MazeAdd.get_results(be);
+            {
+                MazeAdd ma = new MazeAdd();
+                ma.callback += upload;
+                return await ma.get_results(be);
+            }
             else if (be.method == BaseEquation.METHOD.SUB)
-                return MazeSub.get_results(be);
+            {
+                MazeSub ms = new MazeSub();
+                ms.callback += upload;
+                return await ms.get_results(be);
+            }
             else if (be.method == BaseEquation.METHOD.MUL)
-                return MazeMul.get_results(be);
-            return "Wrong input";
+            {
+                MazeMul mm = new MazeMul();
+                mm.callback += upload;
+                return await mm.get_results(be);
+            }
+            else if (be.method == BaseEquation.METHOD.DIV)
+                return MazeDiv.get_results(be);
+            return "Wrong input\r\n";
         }
     }
     /// <summary>
     /// 一个基本方程
     /// </summary>
-    class BaseEquation
+    public class BaseEquation
     {
         /// <summary>
         /// 算式的运算法则
@@ -41,6 +82,9 @@ namespace TheMathMaze
         /// <param name="str">初始化字符串</param>
         public BaseEquation(string str)
         {
+            str = str.Replace(" ", "");
+            str = str.Replace("\r", "");
+            str = str.Replace("\n", "");
             equation_console = str;
             if (!basic_check())
                 clear();
@@ -191,7 +235,7 @@ namespace TheMathMaze
                 return false;
             }
             lines[1] = lines[1].Substring(1);
-            if (method == METHOD.SUB && lines[2][0] == '-')
+            if (method == METHOD.SUB && (lines[2] != string.Empty && lines[2][0] == '-'))
                 lines[2] = lines[2].Substring(1);
             List<char> category_already = new List<char>();
             foreach (string line in lines)
@@ -259,6 +303,22 @@ namespace TheMathMaze
                 {
                     int a = c - '0';
                     ret.Remove(a);
+                }
+            }
+            return ret;
+        }
+        /// <summary>
+        /// 已有的数字
+        /// </summary>
+        /// <returns></returns>
+        public List<int> have_nums()
+        {
+            List<int> ret = new List<int>();
+            foreach (char c in equation_console)
+            {
+                if (c >= '0' && c <= '9' && ret.IndexOf(c - '0') == -1)
+                {
+                    ret.Add(c - '0');
                 }
             }
             return ret;
